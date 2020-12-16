@@ -1,35 +1,31 @@
 package da.klnq.code.day09;
 
-import java.util.stream.IntStream;
-
 public class Puzzle09b {
     private static int INDEX = 665;
-    private static long NUMBER = 1930745883;
 
     public static void main(String[] args) {
         final Numbers numbers = Numbers.readNumbers();
 
-        int startIndex;
-        int endIndex = INDEX -1;
+        int startIndex = INDEX - 1;
+        int endIndex = INDEX - 1;
         long sum = 0;
 
-        for (startIndex = endIndex; startIndex > 0; startIndex--) {
+        while (0 < startIndex && sum != numbers.getNumber(INDEX)) {
             sum += numbers.getNumber(startIndex);
-            if (sum == NUMBER) {
-                break;
-            }
 
-            if (NUMBER < sum) {
+            if (numbers.getNumber(INDEX) < sum) {
                 sum -= numbers.getNumber(endIndex);
                 endIndex--;
             }
+
+            startIndex--;
         }
 
-        long min = IntStream.range(startIndex, endIndex + 1)
-            .mapToLong(numbers::getNumber)
+        startIndex++;
+        endIndex++;
+        long min = numbers.stream(startIndex, endIndex)
             .min().getAsLong();
-        long max = IntStream.range(startIndex, endIndex + 1)
-            .mapToLong(numbers::getNumber)
+        long max = numbers.stream(startIndex, endIndex)
             .max().getAsLong();
 
         System.out.println(min + max);

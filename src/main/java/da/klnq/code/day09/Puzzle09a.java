@@ -9,6 +9,7 @@ public class Puzzle09a {
         while (index < numbers.count()) {
             if (!isValid(numbers, index)) {
                 System.out.println(String.format("Error at index %s: number %s invalid", index, numbers.getNumber(index)));
+                return;
             }
 
             index++;

@@ -2,6 +2,8 @@ package da.klnq.code.day09;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import da.klnq.code.util.IOUtils;
 import da.klnq.code.util.Try;
@@ -26,6 +28,13 @@ public class Numbers {
 
     public long getNumber(int index) {
         return this.numbers.get(index);
+    }
+
+    public LongStream stream(int startIncl, int endExcl) {
+        assert 0 <= startIncl && startIncl < this.count();
+        assert startIncl < endExcl && endExcl <= this.count();
+        return IntStream.range(startIncl, endExcl)
+            .mapToLong(this.numbers::get);
     }
 
     public static Numbers readNumbers() {
