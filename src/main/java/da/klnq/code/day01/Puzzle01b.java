@@ -27,5 +27,5 @@ public class Puzzle01b extends ExpenseLooper {
             }
         }
     }
-    
+
 }
