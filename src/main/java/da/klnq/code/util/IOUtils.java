@@ -38,7 +38,10 @@ public class IOUtils {
         } catch (NumberFormatException ex) {
             return Try.failure(ex, "Error parsing text '%s' as integer.", text);
         }
+    }
 
+    public static Try<String> parseString(String text) {
+        return Try.of(text);
     }
 
 }
