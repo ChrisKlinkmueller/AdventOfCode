@@ -19,6 +19,11 @@ public class Tuple2<T,U> {
         return this.value2;
     }
 
+    public Tuple2<T,U> modify(Tuple2<Function<T,T>, Function<U,U>> modifiers) {
+        assert modifiers != null;        
+        return modify(modifiers.getValue1(), modifiers.getValue2());
+    }
+
     public Tuple2<T,U> modify(Function<T,T> modifier1, Function<U,U> modifier2) {
         assert modifier1 != null;
         assert modifier2 != null;
