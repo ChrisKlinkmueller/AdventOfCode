@@ -62,5 +62,30 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>    
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.14.0</version>
+        <configuration>
+          <format>csv</format>
+          <failOnViolation>false</failOnViolation>
+          <printFailingErrors>true</printFailingErrors>
+          <analysisCache>true</analysisCache>
+          <analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>
+          <minimumTokens>30</minimumTokens>
+          <rulesets>
+            <ruleset>${project.basedir}/src/etc/pmd-ruleset.xml</ruleset>
+          </rulesets>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
