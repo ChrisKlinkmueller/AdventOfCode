@@ -19,26 +19,18 @@ public class TestPuzzle01 {
     
     @Test
     public void testPart1() {
-        final OptionalInt answer = executePart1(TEST_RESOURCE, SUM_PARAMETER);
+        final List<String> expenses = readExpenses(TEST_RESOURCE);
+        final OptionalInt answer = Puzzle01.solvePart1(expenses, SUM_PARAMETER);
         assertTrue(answer.isPresent());
         assertEquals(TEST_RESULT_PART_1, answer.getAsInt());
     }
 
     @Test
     public void testPart2() {
-        final OptionalInt answer = executePart2(TEST_RESOURCE, SUM_PARAMETER);
+        final List<String> expenses = readExpenses(TEST_RESOURCE);
+        final OptionalInt answer = Puzzle01.solvePart2(expenses, SUM_PARAMETER);
         assertTrue(answer.isPresent());
         assertEquals(TEST_RESULT_PART_2, answer.getAsInt());
-    }
-
-    private static OptionalInt executePart1(String resource, int sum) {
-        final List<String> expenses = readExpenses(resource);
-        return Puzzle01.solvePart1(expenses, sum);
-    }
-
-    private static OptionalInt executePart2(String resource, int sum) {
-        final List<String> expenses = readExpenses(resource);
-        return Puzzle01.solvePart2(expenses, sum);
     }
 
     private static List<String> readExpenses(String resource) {
