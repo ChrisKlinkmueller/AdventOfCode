@@ -1,6 +1,6 @@
 package da.klnq.code.day16;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class TicketRule {
     private final String name;
@@ -18,8 +18,8 @@ public class TicketRule {
     }
 
     public boolean isValidValue(int value) {
-        return (this.firstInterval.getValue1() <= value && value <= this.firstInterval.getValue2())
-            || (this.secondInterval.getValue1() <= value && value <= this.secondInterval.getValue2());
+        return (this.firstInterval.get1() <= value && value <= this.firstInterval.get2())
+            || (this.secondInterval.get1() <= value && value <= this.secondInterval.get2());
     }
 
     public String getName() {
@@ -31,10 +31,10 @@ public class TicketRule {
         return String.format(
             "%s: %s-%s or %s-%s",
             this.name,
-            this.firstInterval.getValue1(),
-            this.firstInterval.getValue2(),
-            this.secondInterval.getValue1(),
-            this.secondInterval.getValue2()
+            this.firstInterval.get1(),
+            this.firstInterval.get2(),
+            this.secondInterval.get1(),
+            this.secondInterval.get2()
         );
     }
 }

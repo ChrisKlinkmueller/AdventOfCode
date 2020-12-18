@@ -1,10 +1,7 @@
 package da.klnq.code.day12;
 
-import java.util.List;
-
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public abstract class MoveInstruction {
     private static final String RESOURCE = "/day12/input1.txt";
@@ -12,14 +9,11 @@ public abstract class MoveInstruction {
     protected Tuple2<Integer, Integer> position;
     
     public void solve() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-
-        for (String line : readResult.get()) {
+        for (String line : IOUtils.readResource(RESOURCE)) {
             this.execute(line);
         }
 
-        System.out.println(Math.abs(this.position.getValue1()) + Math.abs(this.position.getValue2()));
+        System.out.println(Math.abs(this.position.get1()) + Math.abs(this.position.get2()));
     }
     
     private void execute(String text) {

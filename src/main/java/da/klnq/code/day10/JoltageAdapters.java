@@ -3,9 +3,9 @@ package da.klnq.code.day10;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class JoltageAdapters {
     private static final String RESOURCE = "/day10/input1.txt";
@@ -26,8 +26,11 @@ public class JoltageAdapters {
     }
 
     public static JoltageAdapters readAdapters() {
-        final Try<List<Integer>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseInteger);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        return new JoltageAdapters(readResult.get());
+        return new JoltageAdapters(
+            IOUtils.readResource(RESOURCE)
+                .stream()
+                .map(Integer::parseInt)
+                .collect(Collectors.toList())
+        );
     }
 }

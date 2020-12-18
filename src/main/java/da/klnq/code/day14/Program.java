@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public abstract class Program {
     private static final String RESOURCE = "/day14/input1.txt";
@@ -14,9 +13,7 @@ public abstract class Program {
     protected String mask;
 
     protected Program() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        this.commands = readResult.get();
+        this.commands = IOUtils.readResource(RESOURCE);
         this.memory = new HashMap<>();
     }
 

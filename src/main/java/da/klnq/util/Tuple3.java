@@ -1,4 +1,4 @@
-package da.klnq.code.util;
+package da.klnq.util;
 
 public class Tuple3<T,U,V> {
     private final T value1;
@@ -11,15 +11,15 @@ public class Tuple3<T,U,V> {
         this.value3 = value3;
     }
 
-    public T getValue1() {
+    public T get1() {
         return this.value1;
     }
 
-    public U getValue2() {
+    public U get2() {
         return this.value2;
     }
 
-    public V getValue3() {
+    public V get3() {
         return this.value3;
     }
 }

@@ -9,7 +9,7 @@ import java.util.OptionalInt;
 import org.junit.jupiter.api.Test;
 
 import da.klnq.advent.Puzzle01;
-import da.klnq.code.util.IOUtils;
+import da.klnq.util.IOUtils;
 
 public class TestPuzzle01 {
     private static final String TEST_RESOURCE = "/01-test-input.txt";

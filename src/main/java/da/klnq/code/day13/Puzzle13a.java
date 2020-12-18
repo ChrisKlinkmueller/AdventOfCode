@@ -2,7 +2,7 @@ package da.klnq.code.day13;
 
 import java.math.BigInteger;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class Puzzle13a {
     
@@ -11,9 +11,9 @@ public class Puzzle13a {
 
         final Tuple2<BigInteger, BigInteger> preference = schedule.getBusIds().stream()
             .map(bus -> computeBusWaitTime(schedule.getTimestamp(), bus))
-            .min((b1, b2) -> b1.getValue2().compareTo(b2.getValue2()))
+            .min((b1, b2) -> b1.get2().compareTo(b2.get2()))
             .get();
-        System.out.println(preference.getValue1().multiply(preference.getValue2()));
+        System.out.println(preference.get1().multiply(preference.get2()));
     }
 
     private static Tuple2<BigInteger, BigInteger> computeBusWaitTime(BigInteger timestamp, BigInteger bus) {

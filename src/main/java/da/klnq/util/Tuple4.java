@@ -1,4 +1,4 @@
-package da.klnq.code.util;
+package da.klnq.util;
 
 public class Tuple4<T,U,V,W> {
     private final T value1;
@@ -13,19 +13,19 @@ public class Tuple4<T,U,V,W> {
         this.value4 = value4;
     }
 
-    public T getValue1() {
+    public T get1() {
         return this.value1;
     }
 
-    public U getValue2() {
+    public U get2() {
         return this.value2;
     }
 
-    public V getValue3() {
+    public V get3() {
         return this.value3;
     }
 
-    public W getValue4() {
+    public W get4() {
         return this.value4;
     }
 }

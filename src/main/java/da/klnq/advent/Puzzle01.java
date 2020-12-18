@@ -6,15 +6,15 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public class Puzzle01 {
     private static final String RESOURCE = "/01-task-input.txt";
     private static final int SUM = 2020;
 
     public static void main(String[] args) {
-        final List<String> input = IOUtils.readResource(RESOURCE, IOUtils::parseString).get();
+        final List<String> input = IOUtils.readResource(RESOURCE);
         
         final OptionalInt resultPart1 = solvePart1(input, SUM);
         System.out.println(String.format("Solution for part 1: %s", resultPart1.getAsInt()));
@@ -51,18 +51,18 @@ public class Puzzle01 {
     }
 
     private static OptionalInt checkExpenses1(List<Integer> expenses, Tuple2<Integer, Integer> indecies, int sum) {
-        final int expense1 = expenses.get(indecies.getValue1());
-        final int expense2 = expenses.get(indecies.getValue2());
+        final int expense1 = expenses.get(indecies.get1());
+        final int expense2 = expenses.get(indecies.get2());
         return expense1 + expense2 == sum
             ? OptionalInt.of(expense1 * expense2)
             : OptionalInt.empty();
     } 
 
     private static OptionalInt checkExpenses2(List<Integer> expenses, Tuple2<Integer, Integer> indecies, int sum) {
-        final int expense1 = expenses.get(indecies.getValue1());
-        final int expense2 = expenses.get(indecies.getValue2());
+        final int expense1 = expenses.get(indecies.get1());
+        final int expense2 = expenses.get(indecies.get2());
 
-        for (int index3 = indecies.getValue2() + 1; index3 < expenses.size(); index3++) {
+        for (int index3 = indecies.get2() + 1; index3 < expenses.size(); index3++) {
             final int expense3 = expenses.get(index3);
             if (expense1 + expense2 + expense3 == sum) {
                 return OptionalInt.of(expense1 * expense2 * expense3);

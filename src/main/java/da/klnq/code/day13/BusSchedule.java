@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class BusSchedule {
     private static final String RESOURCE = "/day13/input1.txt";
@@ -39,14 +38,11 @@ public class BusSchedule {
     }
 
     public static BusSchedule readSchedule() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        assert readResult.get().size() == 2;
-
-        final BigInteger timestamp = new BigInteger(readResult.get().get(0));
+        final List<String> input = IOUtils.readResource(RESOURCE);
+        final BigInteger timestamp = new BigInteger(input.get(0));
         final BusSchedule schedule = new BusSchedule(timestamp);
 
-        final String[] buses = readResult.get().get(1).split(",");
+        final String[] buses = input.get(1).split(",");
         for (int pos = 0; pos < buses.length; pos++) {
             if (!buses[pos].equals("x")) {
                 schedule.add(

@@ -2,11 +2,11 @@ package da.klnq.code.day09;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class Numbers {
     private static final String RESOURCE = "/day09/input1.txt";
@@ -38,8 +38,10 @@ public class Numbers {
     }
 
     public static Numbers readNumbers() {
-        final Try<List<Long>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseLong);
-        assert readResult.isFailure() : readResult.exception().getMessage();
-        return new Numbers(readResult.get());
+        return new Numbers(
+            IOUtils.readResource(RESOURCE).stream()
+                .map(Long::parseLong)
+                .collect(Collectors.toList())
+        );
     }
 }

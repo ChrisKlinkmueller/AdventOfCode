@@ -3,7 +3,7 @@ package da.klnq.code.day11;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class Puzzle11b extends SeatPlanChecker {
 

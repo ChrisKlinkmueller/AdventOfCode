@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import da.klnq.advent.Puzzle02;
-import da.klnq.code.util.IOUtils;
+import da.klnq.util.IOUtils;
 
 public class TestPuzzle02 {
     private static final String TEST_RESOURCE = "/02-test-input.txt";

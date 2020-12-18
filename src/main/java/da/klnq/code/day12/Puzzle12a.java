@@ -1,6 +1,6 @@
 package da.klnq.code.day12;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class Puzzle12a extends MoveInstruction {
     

@@ -8,9 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public class Passport {
     private static final String RESOURCE = "/day04/input1.txt";
@@ -43,12 +42,9 @@ public class Passport {
     }
 
     public static List<Passport> readPassports() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-
         final LinkedList<Passport> passports = new LinkedList<>();
         passports.add(new Passport());
-        for (String line : readResult.get()) {
+        for (String line : IOUtils.readResource(RESOURCE)) {
             if (line.isBlank()) {
                 passports.addFirst(new Passport());
             }

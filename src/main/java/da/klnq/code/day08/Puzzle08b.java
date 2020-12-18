@@ -2,7 +2,7 @@ package da.klnq.code.day08;
 
 import java.util.List;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class Puzzle08b {
     
@@ -11,8 +11,8 @@ public class Puzzle08b {
 
         for (int i = 0; i < instructions.size(); i++) {
             final Tuple2<Boolean, Integer> result = executeModification(instructions, i);
-            if (result.getValue1()) {
-                System.out.println(result.getValue2());
+            if (result.get1()) {
+                System.out.println(result.get2());
                 return;
             }
         }

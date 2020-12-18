@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Tuple4;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple4;
 
 public class Puzzle02 {
     private static final Pattern POLICY_CHECK_PATTERN = Pattern.compile("^([0-9]+)-([0-9]+)\\s+([a-z]):\\s+([a-z]+)");
     private static final String RESOURCE = "/02-task-input.txt";
 
     public static void main(String[] args) {
-        final List<String> input = IOUtils.readResource(RESOURCE, IOUtils::parseString).get();
+        final List<String> input = IOUtils.readResource(RESOURCE);
         
         long validPasswords = solvePart1(input);
         System.out.println(String.format("Solution for part 1: %s", validPasswords));
@@ -36,15 +36,15 @@ public class Puzzle02 {
     }
 
     private static boolean isValidPart1(Tuple4<Long, Long, Character, String> check) {
-        final int occ = (int)check.getValue4().chars()
-            .filter(c -> c == check.getValue3())
+        final int occ = (int)check.get4().chars()
+            .filter(c -> c == check.get3())
             .count();
-        return check.getValue1() <= occ && occ <= check.getValue2();
+        return check.get1() <= occ && occ <= check.get2();
     }
 
     private static boolean isValidPart2(Tuple4<Long, Long, Character, String> check) {
-        return hasCharacterAtIndex(check.getValue4(), check.getValue1(), check.getValue3())
-             ^ hasCharacterAtIndex(check.getValue4(), check.getValue2(), check.getValue3());
+        return hasCharacterAtIndex(check.get4(), check.get1(), check.get3())
+             ^ hasCharacterAtIndex(check.get4(), check.get2(), check.get3());
     }
 
     private static boolean hasCharacterAtIndex(String text, long index, char c) {

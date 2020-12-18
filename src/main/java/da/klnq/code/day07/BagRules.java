@@ -2,11 +2,9 @@ package da.klnq.code.day07;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class BagRules {
     private static final String RESOURCE = "/day07/input1.txt";
@@ -34,9 +32,9 @@ public class BagRules {
         return this.contents.getOrDefault(bag, Collections.emptyMap());
     }
 
-    private Try<Void> parseBagRule(String text) {
+    private void parseBagRule(String text) {
         if (text.contains("contain no other")) {
-            return Try.SUCCESS;
+            return;
         }
 
         final String[] parts = text.split("\\s+");
@@ -47,8 +45,6 @@ public class BagRules {
             final int amount = Integer.parseInt(parts[i]);
             this.addContent(containerBag, containedBag, amount);
         }
-
-        return Try.SUCCESS;
     }
 
     private String getBagName(String[] parts, int index1, int index2) {
@@ -57,8 +53,7 @@ public class BagRules {
 
     public static BagRules readRules() {
         final BagRules rules = new BagRules();
-        final Try<List<Void>> readResult = IOUtils.readResource(RESOURCE, rules::parseBagRule);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
+        IOUtils.readResource(RESOURCE).forEach(rules::parseBagRule);
         return rules;
     }
 }

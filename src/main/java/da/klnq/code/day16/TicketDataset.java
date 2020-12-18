@@ -8,9 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public final class TicketDataset {
     private static final String RESOURCE = "/day16/input.txt";
@@ -38,12 +37,9 @@ public final class TicketDataset {
     }
 
     public static TicketDataset readDataset() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-
         final TicketDataset dataset = new TicketDataset();
         BiConsumer<String, TicketDataset> parser = TicketDataset::parseRule;
-        for (String line : readResult.get()) {
+        for (String line : IOUtils.readResource(RESOURCE)) {
             if (line.equals("your ticket:")) {
                 parser = TicketDataset::parseMyTicket;
             }

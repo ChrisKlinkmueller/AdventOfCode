@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public class Fields {
     private final Map<String, Predicate<String>> fieldRules;
@@ -40,8 +40,8 @@ public class Fields {
     }
 
     private boolean fieldMatches(Tuple2<String, String> field) {
-        return this.fieldRules.getOrDefault(field.getValue1(), t -> false)
-            .test(field.getValue2());
+        return this.fieldRules.getOrDefault(field.get1(), t -> false)
+            .test(field.get2());
     }
 
     private static boolean isValidBirthYear(String text) {

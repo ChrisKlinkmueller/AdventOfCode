@@ -6,8 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class Group {
     private static final String RESOURCE = "/day06/input1.txt";
@@ -29,13 +28,10 @@ public class Group {
         this.peopleAnswers.put(this.peopleAnswers.size(), answers);
     }
 
-    public static List<Group> readGroups() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-    
+    public static List<Group> readGroups() {    
         final LinkedList<Group> groups = new LinkedList<>();
         groups.add(new Group());
-        for (String answers : readResult.get()) {
+        for (String answers : IOUtils.readResource(RESOURCE)) {
             if (answers.isBlank()) {
                 groups.addFirst(new Group());
             }

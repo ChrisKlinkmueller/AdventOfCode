@@ -3,10 +3,10 @@ package da.klnq.code.day08;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public class Instruction {
     private static final String RESOURCE = "/day08/input1.txt";
@@ -40,15 +40,15 @@ public class Instruction {
     }
 
     public static List<Instruction> readInstructions() {
-        final Try<List<Instruction>> readResult = IOUtils.readResource(RESOURCE, Instruction::parseInstruction);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        return readResult.get();
+         return IOUtils.readResource(RESOURCE).stream()
+            .map(Instruction::parseInstruction)
+            .collect(Collectors.toList());
     }
 
-    private static Try<Instruction> parseInstruction(String text) {
+    private static Instruction parseInstruction(String text) {
         final String command = text.substring(0, 3);
         final int argument = Integer.parseInt(text.substring(4));
-        return Try.of(new Instruction(command, argument));
+        return new Instruction(command, argument);
     }
 
     public static Tuple2<Boolean, Integer> execute(List<Instruction> instructions) {

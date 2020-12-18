@@ -3,8 +3,8 @@ package da.klnq.advent;
 import java.util.List;
 import java.util.stream.Stream;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public class Puzzle03 {
     private static final String RESOURCE = "/03-task-input.txt";
@@ -41,14 +41,14 @@ public class Puzzle03 {
 
         Tuple2<Integer, Integer> position = new Tuple2<>(0, 0);
         long trees = 0;
-        while (position.getValue2() < height) {
-            if (map.get(position.getValue2()).charAt(position.getValue1()) == '#') {
+        while (position.get2() < height) {
+            if (map.get(position.get2()).charAt(position.get1()) == '#') {
                 trees++;
             }
 
             position = position.modify(
-                x -> (x + move.getValue1()) % width, 
-                y -> y + move.getValue2()
+                x -> (x + move.get1()) % width, 
+                y -> y + move.get2()
             );
         }
 

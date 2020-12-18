@@ -1,4 +1,4 @@
-package da.klnq.code.util;
+package da.klnq.util;
 
 import java.util.function.Function;
 
@@ -11,17 +11,17 @@ public class Tuple2<T,U> {
         this.value2 = value2;
     }
 
-    public T getValue1() {
+    public T get1() {
         return this.value1;
     }
 
-    public U getValue2() {
+    public U get2() {
         return this.value2;
     }
 
     public Tuple2<T,U> modify(Tuple2<Function<T,T>, Function<U,U>> modifiers) {
         assert modifiers != null;        
-        return modify(modifiers.getValue1(), modifiers.getValue2());
+        return modify(modifiers.get1(), modifiers.get2());
     }
 
     public Tuple2<T,U> modify(Function<T,T> modifier1, Function<U,U> modifier2) {

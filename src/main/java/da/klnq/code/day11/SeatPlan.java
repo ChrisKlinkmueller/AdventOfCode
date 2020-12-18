@@ -5,9 +5,8 @@ import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.IOUtils;
+import da.klnq.util.Tuple2;
 
 public class SeatPlan {
     private static final String RESOURCE = "/day11/input1.txt";
@@ -23,7 +22,7 @@ public class SeatPlan {
         this.columnCount = seats.get(0).length();
         this.seats = new char[this.rowCount][this.columnCount];
         this.positionStream()
-            .forEach(pos -> this.setSeat(pos, seats.get(pos.getValue1()).charAt(pos.getValue2())));
+            .forEach(pos -> this.setSeat(pos, seats.get(pos.get1()).charAt(pos.get2())));
     }
 
     public int getColumnCount() {
@@ -36,18 +35,18 @@ public class SeatPlan {
 
     public char getSeat(Tuple2<Integer, Integer> position) {
         this.assertValidity(position);
-        return this.seats[position.getValue1()][position.getValue2()];
+        return this.seats[position.get1()][position.get2()];
     }
 
     public void setSeat(Tuple2<Integer, Integer> position, char seat) {
         this.assertValidity(position);
-        this.seats[position.getValue1()][position.getValue2()] = seat;
+        this.seats[position.get1()][position.get2()] = seat;
     }
 
     public boolean assertValidity(Tuple2<Integer, Integer> position) {
-        final boolean isValidRow = 0 <= position.getValue1() && position.getValue1() < this.rowCount;
+        final boolean isValidRow = 0 <= position.get1() && position.get1() < this.rowCount;
         assert isValidRow;
-        final boolean isValidCol = 0 <= position.getValue2() && position.getValue2() < this.columnCount;
+        final boolean isValidCol = 0 <= position.get2() && position.get2() < this.columnCount;
         assert isValidCol;
         return isValidCol && isValidRow;
     }
@@ -72,18 +71,16 @@ public class SeatPlan {
     }
 
     public Stream<Tuple2<Integer, Integer>> adjacentPositionStream(Tuple2<Integer, Integer> position) {
-        final int row = position.getValue1();
-        final int column = position.getValue2();
+        final int row = position.get1();
+        final int column = position.get2();
         return IntStream.range(0, 9)
             .mapToObj(seat -> new Tuple2<>(row - 1 + seat / 3, column - 1 + seat % 3))
-            .filter(pos -> 0 <= pos.getValue1() && pos.getValue1() < this.rowCount)
-            .filter(pos -> 0 <= pos.getValue2() && pos.getValue2() < this.columnCount)
-            .filter(pos -> pos.getValue1() != row || pos.getValue2() != column);
+            .filter(pos -> 0 <= pos.get1() && pos.get1() < this.rowCount)
+            .filter(pos -> 0 <= pos.get2() && pos.get2() < this.columnCount)
+            .filter(pos -> pos.get1() != row || pos.get2() != column);
     }
 
     public static SeatPlan readPlan() {
-        final Try<List<String>> readResult = IOUtils.readResource(RESOURCE, IOUtils::parseString);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        return new SeatPlan(readResult.get());
+        return new SeatPlan(IOUtils.readResource(RESOURCE));
     }
 }

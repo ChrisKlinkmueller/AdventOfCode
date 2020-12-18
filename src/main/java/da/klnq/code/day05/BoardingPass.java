@@ -1,9 +1,9 @@
 package da.klnq.code.day05;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import da.klnq.code.util.IOUtils;
-import da.klnq.code.util.Try;
+import da.klnq.util.IOUtils;
 
 public class BoardingPass {
     private static final String RESOURCE = "/day05/input1.txt";
@@ -29,15 +29,16 @@ public class BoardingPass {
     }
 
     public static List<BoardingPass> readPasses() {
-        final Try<List<BoardingPass>> readResult = IOUtils.readResource(RESOURCE, BoardingPass::convert);
-        assert !readResult.isFailure() : readResult.exception().getMessage();
-        return readResult.get();
+        return IOUtils.readResource(RESOURCE)
+            .stream()
+            .map(BoardingPass::convert)
+            .collect(Collectors.toList());
     }
 
-    private static Try<BoardingPass> convert(String text) {
+    private static BoardingPass convert(String text) {
         int row = converToNumber(text.substring(0, 7), 127, 'F');
         int col = converToNumber(text.substring(7, 10), 7, 'L');
-        return Try.of(new BoardingPass(row, col));
+        return new BoardingPass(row, col);
     }
 
     private static int converToNumber(String code, int max, char lower) {
@@ -55,12 +56,5 @@ public class BoardingPass {
         }
 
         return codes[codes.length - 1] == lower ? low : high;
-    }
-
-    public static void main(String[] args) {
-        final BoardingPass pass = convert("FBFBBFFRLR").get();
-        System.out.println(pass.getRow());
-        System.out.println(pass.getColumn());
-        System.out.println(pass.getSeat());
     }
 }

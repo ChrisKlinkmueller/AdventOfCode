@@ -1,6 +1,6 @@
 package da.klnq.code.day12;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public final class Puzzle12b extends MoveInstruction {
 
@@ -67,18 +67,18 @@ public final class Puzzle12b extends MoveInstruction {
     }
 
     private void turnLeft() {
-        this.wayPoint = new Tuple2<>(this.wayPoint.getValue2(), -this.wayPoint.getValue1());
+        this.wayPoint = new Tuple2<>(this.wayPoint.get2(), -this.wayPoint.get1());
     }
 
     private void turnRight() {
-        this.wayPoint = new Tuple2<>(-this.wayPoint.getValue2(), this.wayPoint.getValue1());
+        this.wayPoint = new Tuple2<>(-this.wayPoint.get2(), this.wayPoint.get1());
     }
 
     @Override
     protected void moveForward(int value) {
         this.position = this.position.modify(
-            lon -> lon + this.wayPoint.getValue1() * value, 
-            lat -> lat + this.wayPoint.getValue2() * value
+            lon -> lon + this.wayPoint.get1() * value, 
+            lat -> lat + this.wayPoint.get2() * value
         );
     }
 

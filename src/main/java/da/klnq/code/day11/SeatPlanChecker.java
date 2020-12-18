@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import da.klnq.code.util.Tuple2;
+import da.klnq.util.Tuple2;
 
 public abstract class SeatPlanChecker {
     private final int occupiedSeatThreshold;
@@ -40,7 +40,7 @@ public abstract class SeatPlanChecker {
         plan.positionStream().forEach(pos -> this.checkSeat(pos, modifications));
 
         modifications.forEach(mod -> 
-            plan.setSeat(mod.getValue1(), mod.getValue2())
+            plan.setSeat(mod.get1(), mod.get2())
         );
 
         return !modifications.isEmpty();
