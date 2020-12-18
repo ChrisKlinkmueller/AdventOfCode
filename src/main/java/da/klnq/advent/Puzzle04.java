@@ -22,7 +22,7 @@ public class Puzzle04 {
         "hcl", Puzzle04::isValidHairColor,
         "ecl", Puzzle04::isValidEyeColor,
         "pid", Puzzle04::isValidPassportID,
-        "cid", Puzzle04::isValidCountryID
+        "cid", text -> true
     );
 
     public static void main(String[] args) {
@@ -91,10 +91,6 @@ public class Puzzle04 {
 
     private static boolean isValidPassportID(String text) {
         return text.length() == 9 && text.matches("^[0-9]*");
-    }
-
-    private static boolean isValidCountryID(String text) {
-        return true;
     }
 
     private static boolean isValidNumber(String text, int minIncl, int maxIncl) {
