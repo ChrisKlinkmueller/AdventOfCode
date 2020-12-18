@@ -9,6 +9,21 @@ import java.util.function.Function;
 
 public class IOUtils {
     
+    public static List<String> readResource(String resource) {
+        final InputStream is = IOUtils.class.getResourceAsStream(resource);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            final List<String> lines = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            return lines;
+        }
+        catch (Exception ex) {
+            throw new IllegalArgumentException("Error reading resource: " + resource, ex);
+        }
+    }
+
     public static <T> Try<List<T>> readResource(String resource, Function<String, Try<T>> lineParser) {
         final InputStream is = IOUtils.class.getResourceAsStream(resource);
         if (is == null) {

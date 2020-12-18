@@ -19,7 +19,7 @@ public class TestPuzzle01 {
     
     @Test
     public void testPart1() {
-        final List<String> expenses = readExpenses(TEST_RESOURCE);
+        final List<String> expenses = IOUtils.readResource(TEST_RESOURCE);
         final OptionalInt answer = Puzzle01.solvePart1(expenses, SUM_PARAMETER);
         assertTrue(answer.isPresent());
         assertEquals(TEST_RESULT_PART_1, answer.getAsInt());
@@ -27,16 +27,10 @@ public class TestPuzzle01 {
 
     @Test
     public void testPart2() {
-        final List<String> expenses = readExpenses(TEST_RESOURCE);
+        final List<String> expenses = IOUtils.readResource(TEST_RESOURCE);
         final OptionalInt answer = Puzzle01.solvePart2(expenses, SUM_PARAMETER);
         assertTrue(answer.isPresent());
         assertEquals(TEST_RESULT_PART_2, answer.getAsInt());
-    }
-
-    private static List<String> readExpenses(String resource) {
-        return IOUtils.readResource(resource, IOUtils::parseString)
-            .handleException(ex -> assertTrue(false, ex.getMessage()))
-            .get();
     }
 
 }
