@@ -12,7 +12,7 @@ public class IOUtils {
     public static <T> Try<List<T>> readResource(String resource, Function<String, Try<T>> lineParser) {
         final InputStream is = IOUtils.class.getResourceAsStream(resource);
         if (is == null) {
-            return Try.failure("Resource '%s' doesn't exist.");
+            return Try.failure("Resource '%s' doesn't exist.", resource);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
