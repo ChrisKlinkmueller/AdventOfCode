@@ -63,7 +63,7 @@ public class Puzzle13 {
 
         final String[] buses = input.get(1).split(",");
         for (int pos = 0; pos < buses.length; pos++) {
-            if (!buses[pos].equals("x")) {
+            if (!"x".equals(buses[pos])) {
                 ids.put(
                     new BigInteger(buses[pos]), 
                     BigInteger.valueOf(pos)
