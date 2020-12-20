@@ -1,6 +1,5 @@
 package da.klnq.advent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +44,8 @@ public class Puzzle15 {
     }
 
     private static List<Integer> initNumbers(String input) {
-        return new ArrayList<>(
-            Arrays.stream(input.split(","))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList())
-        );
+        return Arrays.stream(input.split(","))
+            .map(Integer::parseInt)
+            .collect(Collectors.toList());
     }
 }
