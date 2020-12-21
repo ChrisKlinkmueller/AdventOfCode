@@ -1,12 +1,9 @@
 package da.klnq.advent;
 
 import java.math.BigInteger;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import da.klnq.util.IOUtils;
@@ -21,104 +18,157 @@ public class Puzzle20 {
     }
     
     public static BigInteger solvePart1(List<String> input) {
-        final Map<BigInteger, char[][]> tiles = parseTiles(input);
-        return tiles.entrySet()
-            .stream()
-            .filter(e -> countNeighbors(e.getKey(), e.getValue(), tiles.entrySet()) == 2)
-            .map(e -> e.getKey())
+        final List<Image> images = parseImages(input);        
+        connectImages(images);        
+        return images.stream()
+            .filter(image -> image.neighborCount() == 2)
+            .map(image -> image.id)
             .reduce(BigInteger.ONE, (v1, v2) -> v1.multiply(v2));
     }
-
-    private static long countNeighbors(BigInteger id, char[][] tile, Set<Entry<BigInteger, char[][]>> tiles) {
-        return tiles.stream()
-            .filter(e -> !e.getKey().equals(id))
-            .filter(e -> sharesSide(tile, e.getValue()))
-            .count();
+    
+    public static int solvePart2(List<String> input) {
+        final List<Image> images = parseImages(input);        
+        connectImages(images);        
+        return 0;
     }
 
-    private static final List<BiFunction<char[][], Integer, Character>> ACCESSORS_1 = List.of(
-        Puzzle20::leftFromTop,
-        Puzzle20::rightFromTop,
-        Puzzle20::topFromLeft,
-        Puzzle20::bottomFromLeft
-    );
-    private static final List<BiFunction<char[][], Integer, Character>> ACCESSORS_2 = List.of(
-        Puzzle20::leftFromBottom,
-        Puzzle20::leftFromTop,
-        Puzzle20::rightFromBottom,
-        Puzzle20::rightFromTop,
-        Puzzle20::topFromLeft,
-        Puzzle20::topFromRight,
-        Puzzle20::bottomFromLeft,
-        Puzzle20::bottomFromRight
-    );
+    private static void connectImages(List<Image> images) {
+        final List<Image> unconnectedImages = new ArrayList<>(images);
 
-    private static boolean sharesSide(char[][] tile1, char[][] tile2) {
-        for (BiFunction<char[][], Integer, Character> accessor1 : ACCESSORS_1) {
-            for (BiFunction<char[][], Integer, Character> accessor2 : ACCESSORS_2) {
-                if (areEqual(tile1, tile2, accessor1, accessor2)) {
-                    return true;
+        while (!unconnectedImages.isEmpty()) {
+            final Image image1 = findImageToConnect(unconnectedImages);
+            for (Image image2 : unconnectedImages) {
+                if (image1.neighborCount() < 4) {
+                    connectImagesIfPossible(image1, image2);
                 }
             }
+        }        
+    }
+
+    private static void connectImagesIfPossible(Image image1, Image image2) {
+        if (tryCombinations(image1, image2) || image2.isOriented()) {
+            return;
         }
-        return false;
+
+        for (int index = 0; index < 7; index++) {
+            image2.flip();
+            if (index % 2 == 1) {
+                image2.rotate();
+            }
+
+            if (tryCombinations(image1, image2)) {
+                return;
+            }
+        }
+    }
+
+    private static boolean tryCombinations(Image image1, Image image2) {
+        if (image1.top == null && image2.bottom == null && areEqual(image1::getTop, image2::getBottom)) {
+            image1.top = image2;
+            image2.bottom = image1;
+        }
+        else if (image1.bottom == null && image2.top == null && areEqual(image1::getBottom, image2::getTop)) {
+            image1.bottom = image2;
+            image2.top = image1;
+        }
+        else if (image1.left == null && image2.right == null && areEqual(image1::getLeft, image2::getRight)) {
+            image1.left = image2;
+            image2.right = image1;
+        }
+        else if (image1.right == null && image2.left == null && areEqual(image1::getRight, image2::getLeft)) {
+            image1.right = image2;
+            image2.left = image1;
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 
     private static boolean areEqual(
-        char[][] tile1,
-        char[][] tile2,
-        BiFunction<char[][], Integer, Character> accessor1,
-        BiFunction<char[][], Integer, Character> accessor2
+        Function<Integer, Character> accessor1,
+        Function<Integer, Character> accessor2
     ) {
         return IntStream.range(0, DIMENSION)
-            .allMatch(i -> accessor1.apply(tile1, i) == accessor2.apply(tile2, i));
+            .allMatch(i -> accessor1.apply(i).equals(accessor2.apply(i)));
     }
 
-    private static char leftFromTop(char[][] tile, int index) {
-        return tile[index][0];
+    private static Image findImageToConnect(List<Image> unconnectedImages) {
+        for (int i = 0; i < unconnectedImages.size(); i++) {
+            if (unconnectedImages.get(i).neighborCount() != 0) {
+                return unconnectedImages.remove(i);
+            }
+        }
+        return unconnectedImages.remove(0);
     }
 
-    private static char leftFromBottom(char[][] tile, int index) {
-        return tile[DIMENSION - 1 - index][0];
-    }
-
-    private static char rightFromTop(char[][] tile, int index) {
-        return tile[index][DIMENSION - 1];
-    }
-
-    private static char rightFromBottom(char[][] tile, int index) {
-        return tile[DIMENSION - 1 - index][DIMENSION - 1];
-    }
-
-    private static char topFromLeft(char[][] tile, int index) {
-        return tile[0][index];
-    }
-
-    private static char topFromRight(char[][] tile, int index) {
-        return tile[0][DIMENSION - 1 - index];
-    }
-
-    private static char bottomFromLeft(char[][] tile, int index) {
-        return tile[DIMENSION - 1][index];
-    }
-
-    private static char bottomFromRight(char[][] tile, int index) {
-        return tile[DIMENSION - 1][DIMENSION - 1 - index];
-    }    
-
-    private static Map<BigInteger, char[][]> parseTiles(List<String> input) {
-        final Map<BigInteger, char[][]> tiles = new HashMap<>();
-
+    private static List<Image> parseImages(List<String> input) {
+        final List<Image> images = new ArrayList<>();
         for (int i = 0; i < input.size(); i += 12) {
-            final BigInteger id = new BigInteger(input.get(i).replaceAll("[Tile :]", ""));
-            final char[][] idTiles = IntStream.range(i + 1, i + 11)
-                .mapToObj(input::get)
-                .map(String::toCharArray)
+            final Image image = new Image();
+            image.id = new BigInteger(input.get(i).replaceAll("[Tile :]", ""));
+            image.tiles = IntStream.range(i + 1, i + 11)
+                .mapToObj(r -> input.get(r).toCharArray())
                 .toArray(char[][]::new);
-            tiles.put(id, idTiles);
+            images.add(image);
+        }
+        return images;
+    }
+
+    private static class Image {
+        private char[][] tiles;
+        private BigInteger id;
+        private Image right;
+        private Image left;
+        private Image top;
+        private Image bottom;
+        
+        private boolean isOriented() {
+            return this.neighborCount() != 0;
         }
 
-        return tiles;
+        private int neighborCount() {
+            int count = this.right == null ? 0 : 1;
+            count += this.bottom == null ? 0 : 1;
+            count += this.left == null ? 0 : 1;
+            return count + (this.top == null ? 0 : 1);
+        }
+
+        public void rotate() {
+            final char[][] newTiles = new char[this.tiles.length][this.tiles.length];
+            for (int row = 0; row < this.tiles.length; row++) {
+                for (int col = 0; col < this.tiles.length; col++) {
+                    newTiles[row][col] = this.tiles[col][this.tiles.length - row - 1];
+                }
+            }
+            this.tiles = newTiles;
+        }
+
+        public void flip() {
+            final char[][] newTiles = new char[this.tiles.length][this.tiles.length];
+            for (int row = 0; row < this.tiles.length; row++) {
+                for (int col = 0; col < this.tiles.length; col++) {
+                    newTiles[row][col] = this.tiles[row][this.tiles.length - 1 - col];
+                }
+            }
+            this.tiles = newTiles;
+        }
+
+        private char getTop(int index) {
+            return this.tiles[0][index];
+        }
+
+        private char getBottom(int index) {
+            return this.tiles[this.tiles.length - 1][index];
+        }
+
+        private char getLeft(int index) {
+            return this.tiles[index][0];
+        }
+
+        private char getRight(int index) {
+            return this.tiles[index][this.tiles.length - 1];
+        }
     }
 
 }
