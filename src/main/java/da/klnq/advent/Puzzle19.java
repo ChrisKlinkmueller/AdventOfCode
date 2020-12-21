@@ -45,39 +45,25 @@ public class Puzzle19 {
     }
 
     private boolean isValidPart2(String message) {
-        System.out.println(message);
-        final Tuple2<Integer,Integer> matches31 = this.matches31(message);
+        final Tuple2<Integer,Integer> matches31 = this.matches(message, "31");
+        
         if (matches31.get1() == 0) {
             return false;
         }
-        
-        return this.matches42(message.substring(0, matches31.get2()), matches31.get1());
+                
+        message = message.substring(0, matches31.get2());
+        final Tuple2<Integer,Integer> matches42 = this.matches(message, "42");
+        return matches42.get2() == 0 && matches31.get1() < matches42.get1();
     }
 
-    private boolean matches42(String message, int matchThreshold) {
-        int matches = 0;
-        int startIndex = 0;
-        int endIndex = startIndex + 1;
-        while (endIndex <= message.length()) {
-            final String submessage = message.substring(startIndex, endIndex);
-            if (this.rules.get("42").apply(submessage, 0) == submessage.length()) {
-                matches++;
-                startIndex = endIndex;
-                endIndex++;
-            }
-            endIndex++;
-        }
-        return startIndex == message.length() && matchThreshold < matches;
-    }
-
-    private Tuple2<Integer, Integer> matches31(String message) {
+    private Tuple2<Integer, Integer> matches(String message, String rule) {
         int matches = 0;
         int startIndex = message.length() - 1;
         int endIndex = message.length();
 
         while (0 <= startIndex) {
             final String submessage = message.substring(startIndex, endIndex);
-            if (this.rules.get("31").apply(submessage, 0) == submessage.length()) {
+            if (this.rules.get(rule).apply(submessage, 0) == submessage.length()) {
                 matches++;
                 endIndex = startIndex;
             }
