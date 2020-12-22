@@ -1,5 +1,7 @@
 # Advent-of-Code
 
+![Java CI with Maven](https://github.com/ChrisKlinkmueller/AdventOfCode/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master)
+
 My solutions for the awesome [Advent of Code 2020](https://adventofcode.com/2020) challenge.
 
 | Day | Description | Solution |
