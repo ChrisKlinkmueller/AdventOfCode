@@ -2,9 +2,11 @@ package da.klnq.advent;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import da.klnq.util.IOUtils;
 
@@ -15,6 +17,7 @@ public class Puzzle20 {
     public static void main(String[] args) {
         final List<String> input = IOUtils.readResource(RESOURCE);
         System.out.println("Solution part 1: " + solvePart1(input));
+        System.out.println("Solution part 2: " + solvePart2(input));
     }
     
     public static BigInteger solvePart1(List<String> input) {
@@ -26,13 +29,87 @@ public class Puzzle20 {
             .reduce(BigInteger.ONE, (v1, v2) -> v1.multiply(v2));
     }
     
-    public static int solvePart2(List<String> input) {
+    public static long solvePart2(List<String> input) {
         final List<Image> images = parseImages(input);        
-        connectImages(images);        
-        return 0;
+        connectImages(images);         
+        final Image image = combine(images);
+        final Image monster = createMonster();
+        findMonsters(image, monster);
+        return computeRoughness(image);
     }
 
-    private static void connectImages(List<Image> images) {
+    private static long computeRoughness(Image image) {
+        return Arrays.stream(image.tiles)
+            .flatMap(row -> IntStream.range(0, row.length).mapToObj(i -> row[i]))
+            .filter(field -> field.equals('#'))
+            .count();
+    }
+
+    private static void findMonsters(Image image, Image monster) {
+        for (int i = 0; i < 8; i++) {
+            monster.flip();
+            if (i % 2 == 1) {
+                monster.rotate();
+            }
+
+            markMonsters(image, monster);
+        }
+    }
+
+    private static void markMonsters(Image image, Image monster) {
+        for (int row = 0; row < image.tiles.length - monster.tiles.length; row++) {
+            for (int col = 0; col < image.tiles[0].length - monster.tiles[0].length; col++) {
+                if (isMonster(image, monster, row, col)) {
+                    highlightMonster(image, monster, row, col);
+                }
+            }
+        }
+    }
+
+    private static void highlightMonster(Image image, Image monster, int row, int col) {
+        for (int r = 0; r < monster.tiles.length; r++) {
+            for (int c = 0; c < monster.tiles[0].length; c++) {
+                if (monster.tiles[r][c] == '#') {
+                    image.tiles[row + r][col + c] = 'O';
+                }
+            }
+        }
+    }
+
+    private static boolean isMonster(Image image, Image monster, int row, int col) {
+        for (int r = 0; r < monster.tiles.length; r++) {
+            for (int c = 0; c < monster.tiles[0].length; c++) {
+                if (Character.valueOf(monster.tiles[r][c]).equals('#')) {
+                    if (image.tiles[row + r][col + c] == '.') {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static Image combine(List<Image> images) {
+        final int dim = DIMENSION - 2;
+        final int width = dim * (images.stream().mapToInt(Image::getColumn).max().getAsInt() + 1);
+        final int height = dim * (images.stream().mapToInt(Image::getRow).max().getAsInt() + 1);
+        
+        Image combinedImage = new Image();
+        combinedImage.tiles = new char[height][width];
+        for (Image image : images) {
+            int row = image.getRow();
+            int col = image.getColumn();
+            for (int r = 0; r < dim; r++) {
+                for (int c = 0; c < dim; c++) {
+                    combinedImage.tiles[dim * row + r][dim * col + c] = image.tiles[r + 1][c + 1];
+                }
+            }
+        }
+
+        return combinedImage;
+    }
+
+    public static void connectImages(List<Image> images) {
         final List<Image> unconnectedImages = new ArrayList<>(images);
 
         while (!unconnectedImages.isEmpty()) {
@@ -102,32 +179,48 @@ public class Puzzle20 {
         return unconnectedImages.remove(0);
     }
 
-    private static List<Image> parseImages(List<String> input) {
+    public static List<Image> parseImages(List<String> input) {
         final List<Image> images = new ArrayList<>();
         for (int i = 0; i < input.size(); i += 12) {
-            final Image image = new Image();
-            image.id = new BigInteger(input.get(i).replaceAll("[Tile :]", ""));
-            image.tiles = IntStream.range(i + 1, i + 11)
-                .mapToObj(r -> input.get(r).toCharArray())
-                .toArray(char[][]::new);
-            images.add(image);
+            images.add(parseImage(input.subList(i, i + 11)));
         }
         return images;
     }
 
-    private static class Image {
-        private char[][] tiles;
-        private BigInteger id;
-        private Image right;
-        private Image left;
-        private Image top;
-        private Image bottom;
+    public static Image parseImage(List<String> input) {
+        final Image image = new Image();
+        image.id = new BigInteger(input.get(0).replaceAll("[Tile :]", ""));
+        image.tiles = IntStream.range(1, 11)
+            .mapToObj(r -> input.get(r).toCharArray())
+            .toArray(char[][]::new);
+        return image;
+    }
+
+    private static Image createMonster() {
+        final Image monster = new Image();
+        monster.tiles = Stream.of(
+                "                  # ",
+                "#    ##    ##    ###",
+                " #  #  #  #  #  #   "
+            )
+            .map(String::toCharArray)
+            .toArray(char[][]::new);
+        return monster;
+    }
+
+    public static class Image {
+        public char[][] tiles;
+        public BigInteger id;
+        public Image right;
+        public Image left;
+        public Image top;
+        public Image bottom;
         
-        private boolean isOriented() {
+        public boolean isOriented() {
             return this.neighborCount() != 0;
         }
 
-        private int neighborCount() {
+        public int neighborCount() {
             int count = this.right == null ? 0 : 1;
             count += this.bottom == null ? 0 : 1;
             count += this.left == null ? 0 : 1;
@@ -135,39 +228,59 @@ public class Puzzle20 {
         }
 
         public void rotate() {
-            final char[][] newTiles = new char[this.tiles.length][this.tiles.length];
-            for (int row = 0; row < this.tiles.length; row++) {
-                for (int col = 0; col < this.tiles.length; col++) {
-                    newTiles[row][col] = this.tiles[col][this.tiles.length - row - 1];
+            final int rowCount = this.tiles[0].length;
+            final int colCount = this.tiles.length;
+            final char[][] newTiles = new char[rowCount][colCount];
+            for (int row = 0; row < rowCount; row++) {
+                for (int col = 0; col < colCount; col++) {
+                    newTiles[row][col] = this.tiles[col][rowCount - row - 1];
                 }
             }
             this.tiles = newTiles;
         }
 
         public void flip() {
-            final char[][] newTiles = new char[this.tiles.length][this.tiles.length];
+            final char[][] newTiles = new char[this.tiles.length][this.tiles[0].length];
             for (int row = 0; row < this.tiles.length; row++) {
-                for (int col = 0; col < this.tiles.length; col++) {
-                    newTiles[row][col] = this.tiles[row][this.tiles.length - 1 - col];
+                for (int col = 0; col < this.tiles[0].length; col++) {
+                    newTiles[row][col] = this.tiles[row][this.tiles[0].length - 1 - col];
                 }
             }
             this.tiles = newTiles;
         }
 
-        private char getTop(int index) {
+        public char getTop(int index) {
             return this.tiles[0][index];
         }
 
-        private char getBottom(int index) {
+        public char getBottom(int index) {
             return this.tiles[this.tiles.length - 1][index];
         }
 
-        private char getLeft(int index) {
+        public char getLeft(int index) {
             return this.tiles[index][0];
         }
 
-        private char getRight(int index) {
+        public char getRight(int index) {
             return this.tiles[index][this.tiles.length - 1];
+        }
+
+        public int getRow() {
+            int row = 0;
+            Image img = this;
+            while ((img = img.top) != null) {
+                row++;
+            }
+            return row;
+        }
+
+        public int getColumn() {
+            int col = 0;
+            Image img = this;
+            while ((img = img.left) != null) {
+                col++;
+            }
+            return col;
         }
     }
 
