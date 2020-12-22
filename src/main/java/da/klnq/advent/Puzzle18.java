@@ -81,7 +81,7 @@ public class Puzzle18 {
             .reduce(BigInteger.ONE, (v1, v2) -> v1.multiply(v2));
     }
 
-    private static final Stack<Object> decomposeExpression(String expression) {
+    private static Stack<Object> decomposeExpression(String expression) {
         expression = expression.replaceAll("\\s+", "");
         final Stack<Object> parts = new Stack<>();
         int i = expression.length() - 1;
