@@ -28,3 +28,4 @@ My solutions for the awesome [Advent of Code 2020](https://adventofcode.com/2020
 | 20   | [Jurassic Jigsaw](https://adventofcode.com/2020/day/20) | [Puzzle20.java](./src/main/java/da/klnq/advent/Puzzle20.java)|
 | 21   | [Allergen Assessment](https://adventofcode.com/2020/day/21) | [Puzzle21.java](./src/main/java/da/klnq/advent/Puzzle21.java)|
 | 22   | [Crab Combat](https://adventofcode.com/2020/day/22) | [Puzzle22.java](./src/main/java/da/klnq/advent/Puzzle22.java)|
+| 23   | [Crab Cups](https://adventofcode.com/2020/day/23) | [Puzzle23.java](./src/main/java/da/klnq/advent/Puzzle23.java)|
