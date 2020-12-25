@@ -12,9 +12,9 @@ public class Puzzle15 {
     private static final String RESOURCE = "/15-task-input.txt";
 
     public static void main(String[] args) {
-        final String INPUT = IOUtils.readResource(RESOURCE).get(0);
-        System.out.println("Solution for part 1: " + solve(INPUT, 2020));
-        System.out.println("Solution for part 2: " + solve(INPUT, 30000000));
+        final String input = IOUtils.readResource(RESOURCE).get(0);
+        System.out.println("Solution for part 1: " + solve(input, 2020));
+        System.out.println("Solution for part 2: " + solve(input, 30000000));
     }
 
     public static int solve(String input, int lastRound) {
