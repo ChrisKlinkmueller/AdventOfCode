@@ -23,7 +23,7 @@ public class Puzzle25 {
         return transformSubjectNumber(pubKey2, (v, l) -> l < loopSize1).get1();
     }
 
-    public static Tuple2<Long,Long> transformSubjectNumber(
+    private static Tuple2<Long,Long> transformSubjectNumber(
         long subjectNumber, 
         BiPredicate<Long,Long> computeStop
     ) {
