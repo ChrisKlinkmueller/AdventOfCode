@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import da.klnq.util.IOUtils;
+
 public class Puzzle15 {
-    private static final String INPUT = "12,1,16,3,11,0";
+    private static final String RESOURCE = "/15-task-input.txt";
 
     public static void main(String[] args) {
+        final String INPUT = IOUtils.readResource(RESOURCE).get(0);
         System.out.println("Solution for part 1: " + solve(INPUT, 2020));
         System.out.println("Solution for part 2: " + solve(INPUT, 30000000));
     }
