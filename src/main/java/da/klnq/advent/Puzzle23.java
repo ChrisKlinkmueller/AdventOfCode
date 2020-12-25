@@ -2,25 +2,29 @@ package da.klnq.advent;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
+import da.klnq.util.IOUtils;
+
 public class Puzzle23 {
-    private static final String INPUT = "538914762";
+    private static final String RESOURCE = "/23-task-input.txt";
 
     public static void main(String[] args) {
-        System.out.println("Solution part 1: " + solvePart1(INPUT));
-        System.out.println("Solution part 2: " + solvePart2(INPUT));
+        final String input = IOUtils.readResource(RESOURCE).get(0);
+        System.out.println("Solution part 1: " + solvePart1(input));
+        System.out.println("Solution part 2: " + solvePart2(input));
     }
 
     public static String solvePart1(String input) {
-        final Node one = solve(input, 100, input.length());
+        final Cup one = solve(input, 100, input.length());
         return toString(one);        
     }
 
-    private static String toString(Node node) {
+    private static String toString(Cup cup) {
         final StringBuilder builder = new StringBuilder();
-        Node current = node.next;
-        while (current != node) {
+        Cup current = cup.next;
+        while (!current.equals(cup)) {
             builder.append(current.value);
             current = current.next;
         }
@@ -28,20 +32,21 @@ public class Puzzle23 {
     }
 
     public static BigInteger solvePart2(String input) {
-        final Node one = solve(input, 10000000, 1000000);
+        final Cup one = solve(input, 10000000, 1000000);
         return BigInteger.valueOf(one.next.value).multiply(
             BigInteger.valueOf(one.next.next.value)
         );
     }
 
-    public static Node solve(String input, int moves, int numCups) {
-        final TreeSet<Node> cups = new TreeSet<>();
-        Node current = createLinkedList(input, cups, numCups);
+    public static Cup solve(String input, int moves, int numCups) {
+        final NavigableSet<Cup> cups = new TreeSet<>();
+        Cup current = createLinkedList(input, cups, numCups);
         for (int i = 0; i < moves; i++) {
-            final List<Node> threeCups = List.of(current.next, current.next.next, current.next.next.next);            
-            Node dest = current;
+            final List<Cup> threeCups = List.of(current.next, current.next.next, current.next.next.next);            
+            
+            Cup dest = current;
             do {
-                dest = cups.floor(new Node(dest.value - 1));
+                dest = cups.floor(new Cup(dest.value - 1));
                 if (dest == null) {
                     dest = cups.last();
                 }
@@ -53,23 +58,23 @@ public class Puzzle23 {
             current = current.next;
         }
 
-        return cups.floor(new Node(1));
+        return cups.floor(new Cup(1));
     }
 
-    private static boolean isValid(Node node, List<Node> nodes) {
+    private static boolean isValid(Cup node, List<Cup> nodes) {
         return nodes.stream().allMatch(n -> n.value != node.value);
     }
 
-    private static Node createLinkedList(String input, TreeSet<Node> cups, int numCups) {
-        Node head = null;
-        Node current = null;
+    private static Cup createLinkedList(String input, NavigableSet<Cup> cups, int numCups) {
+        Cup head = null;
+        Cup current = null;
         for (int i = 1; i <= numCups; i++) {
             int cup = i <= input.length() ? input.charAt(i - 1) - '0' : i;
             if (head == null) {
-                head = current = new Node(cup);
+                head = current = new Cup(cup);
             }
             else {
-                current.next = new Node(cup);
+                current.next = new Cup(cup);
                 current = current.next;
             }
 
@@ -79,17 +84,17 @@ public class Puzzle23 {
         return head;
     } 
 
-    private static class Node implements Comparable<Node> {
+    private static class Cup implements Comparable<Cup> {
         private final int value;
-        private Node next;
+        private Cup next;
 
-        private Node(int value) {
+        private Cup(int value) {
             this.value = value;
         }
 
         @Override
-        public int compareTo(Node node) {
-            return Integer.compare(this.value, node.value);
+        public int compareTo(Cup cup) {
+            return Integer.compare(this.value, cup.value);
         }
     }
 }
