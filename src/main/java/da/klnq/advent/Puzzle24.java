@@ -165,7 +165,7 @@ public class Puzzle24 {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == null || !(obj instanceof Tile)) {
+            if (!(obj instanceof Tile)) {
                 return false;
             }
             if (obj == this) {
