@@ -30,4 +30,4 @@ My solutions for the awesome [Advent of Code 2020](https://adventofcode.com/2020
 | 22   | [Crab Combat](https://adventofcode.com/2020/day/22) | [Puzzle22.java](./src/main/java/da/klnq/advent/Puzzle22.java)|
 | 23   | [Crab Cups](https://adventofcode.com/2020/day/23) | [Puzzle23.java](./src/main/java/da/klnq/advent/Puzzle23.java)|
 | 24   | [Lobby Layout](https://adventofcode.com/2020/day/24) | [Puzzle24.java](./src/main/java/da/klnq/advent/Puzzle24.java)|
-| 25   | [Lobby Layout](https://adventofcode.com/2020/day/25) | [Puzzle25.java](./src/main/java/da/klnq/advent/Puzzle25.java)|
+| 25   | [Combo Breaker](https://adventofcode.com/2020/day/25) | [Puzzle25.java](./src/main/java/da/klnq/advent/Puzzle25.java)|

@@ -18,9 +18,8 @@ public class Puzzle25 {
 
     public static long solve(List<String> input) {
         final long pubKey1 = Long.parseLong(input.get(0));
-        final long loopSize1 = transformSubjectNumber(INIT_SUBJECT_NUMBER, (v, l) -> v != pubKey1).get2();
-
         final long pubKey2 = Long.parseLong(input.get(1));
+        final long loopSize1 = transformSubjectNumber(INIT_SUBJECT_NUMBER, (v, l) -> v != pubKey1).get2();
         return transformSubjectNumber(pubKey2, (v, l) -> l < loopSize1).get1();
     }
 
